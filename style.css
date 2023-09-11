@@ -31,6 +31,7 @@ header a {
     padding-left: 2rem;
 }
 
+
 .mobile-nav {
     display: flex;
     flex-direction: column;
@@ -59,6 +60,7 @@ header a {
 
 .toggle {
     cursor: pointer;
+    z-index: 10;
 }
 
 @media screen and (min-width: 500px) {
@@ -77,11 +79,6 @@ header a {
     }
 }
 
-/* HERO */
-/* .hero::before {
-    position: absolute;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .2) 0%, rgba(0, 0, 0, 0) 100%);
-} */
 
 .hero img {
     width: 100%;
@@ -166,6 +163,7 @@ main {
 
 .out-of-stock-btn {
     background-color: var(--Dark-gray);
+    cursor: not-allowed;
 }
 
 @media screen and (max-width: 500px) {
@@ -272,6 +270,9 @@ main {
     /* Add a smooth transition effect */
 }
 
+.border {
+    display: none;
+}
 
 @media screen and (max-width: 500px) {
     .graph {
@@ -279,20 +280,24 @@ main {
         flex-direction: column;
     }
 
-    .graph div {
+    .graph-item {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         border-right: none;
-        border-bottom: 1px solid var(--Dark-gray);
+        gap: .2rem;
         padding: 2rem 0;
     }
 
-    .graph div:last-child {
-        border: none;
+    .border {
+        display: flex;
+        border-bottom: 1px solid hsla(0, 0%, 48%, .4);
+        width: 100px;
+        padding-top: 2rem;
     }
 }
+
 
 /* ABOUT SECTION */
 .about {
@@ -410,7 +415,8 @@ main {
 .pledge-modal>img {
     max-width: 20px;
     position: absolute;
-    right: 1rem;
+    right: 2rem;
+    cursor: pointer;
 }
 
 .modal-head>h2 {
@@ -441,7 +447,6 @@ main {
 
 input[type='radio']:checked {
     accent-color: var(--Moderate-cyan);
-    background-color: white;
 }
 
 input {
@@ -493,13 +498,23 @@ input[type="number"]::-webkit-outer-spin-button {
     font-size: 1.5rem;
 }
 
-#modalCloseBtn {
-    cursor: pointer;
+.amount-left-mobile {
+    display: flex;
+    align-items: center;
 }
+
+.amount-left-mobile h3 {
+    font-size: 1.5rem;
+}
+
+.amount-left-mobile>p {
+    padding: 0 0 .8rem .6rem;
+}
+
 
 @media screen and (max-width: 500px) {
     .modal {
-        max-width: 95vw;
+        width: 90vw;
         top: 125%;
     }
 
@@ -507,14 +522,50 @@ input[type="number"]::-webkit-outer-spin-button {
         padding: 1rem;
     }
 
+    .pledge-modal>img {
+        top: 2.4rem;
+        right: 2rem;
+        width: 30px;
+    }
+
+    .pledge-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
     .pledge-content p {
-        margin-left: -1.5rem;
         padding-top: 1rem;
+    }
+
+    .pledge-title-container {
+        margin-left: 3rem;
+    }
+
+    .radio-btn-container {
+        position: absolute;
+        top: 2rem;
     }
 
     .pledge-title {
         display: flex;
         flex-direction: column;
+        gap: .5rem;
+    }
+
+    .no-reward {
+        padding-top: .7rem;
+    }
+
+    .amount-left {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .amount-left-mobile {
+        display: none;
     }
 }
 
@@ -525,8 +576,10 @@ input[type="number"]::-webkit-outer-spin-button {
     align-items: center;
     padding: 2rem;
     margin-top: -2rem;
-    border: 1px solid hsla(0, 0%, 48%, .2);
+    border: 2px solid var(--Moderate-cyan);
     border-top: none;
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
 }
 
 .dropdown p {
@@ -540,7 +593,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .dropdown-btns input {
-    border: 2px solid var(--Dark-cyan);
+    border: 2px solid hsla(0, 0%, 48%, .3);
     border-radius: 5rem;
     max-width: 150px;
     background: url(images/dollar.svg);
@@ -551,6 +604,14 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .dropdown-btns input::placeholder {
     text-align: right;
+}
+
+@media screen and (max-width: 500px) {
+    .dropdown {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
 }
 
 /* SUCCESS MODAL */
@@ -579,6 +640,10 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* JAVASCRIPT CLASSES */
+.active-container {
+    border: 1px solid var(--Moderate-cyan);
+}
+
 .hidden {
     display: none;
 }
@@ -592,7 +657,19 @@ input[type="number"]::-webkit-outer-spin-button {
     fill: var(--Dark-cyan)
 }
 
+.active-container {
+    border: 2px solid var(--Moderate-cyan);
+    border-bottom: 1px solid hsla(0, 0%, 48%, .2);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .overlay {
     background-color: rgba(0, 0, 0, .7);
-    z-index: 5;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

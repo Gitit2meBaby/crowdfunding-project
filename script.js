@@ -3,10 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const toggle = document.querySelector('#toggleBtn')
     const closeBtn = document.querySelector('#closeBtn')
     const mobileNav = document.querySelector('.mobile-nav')
-    const main = document.querySelector('.main')
-    const hero = document.querySelector('.hero')
     const bookmarkBtn = document.querySelector('.bookmark-btn')
-
+    const overlay = document.querySelector('#overlay')
     checkScreenWidth();
 
     // MOBILE MENU
@@ -14,18 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
         toggle.classList.add('hidden')
         closeBtn.classList.remove('hidden')
         mobileNav.classList.remove('hidden')
-        main.classList.add('overlay')
-        hero.classList.add('overlay')
+        overlay.classList.remove('hidden')
+
     })
 
     closeBtn.addEventListener('click', () => {
         toggle.classList.remove('hidden')
         closeBtn.classList.add('hidden')
         mobileNav.classList.add('hidden')
-        main.classList.remove('overlay')
-        hero.classList.remove('overlay')
-    })
+        overlay.classList.add('hidden')
 
+    })
 
     // BOOKMARK BUTTON
     function checkScreenWidth() {
@@ -38,20 +35,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    const bookmarkImage = document.querySelector('#bookmarkImage');
-    let isBookmarked = false; // Track the bookmarked state
+    // const bookmarkImage = document.querySelector('#bookmarkImage');
+    let isBookmarked = false;
 
     bookmarkBtn.addEventListener('click', () => {
-        isBookmarked = !isBookmarked; // Toggle the bookmarked state
-        console.log('isBookmarked:', isBookmarked); // Log the state
+        isBookmarked = !isBookmarked;
 
-        if (isBookmarked) {
+        if (isBookmarked && window.innerWidth >= 500) {
             bookmarkBtn.textContent = 'Bookmarked';
             bookmarkBtn.classList.add('bookmarked')
-            bookmarkImage.classList.add('btn-bookmarked');
+            // bookmarkImage.style.fill = "green"
         } else {
-            bookmarkBtn.textContent = 'Bookmark';
-            bookmarkImage.classList.remove('btn-bookmarked');
+            if (window.innerWidth >= 500) {
+                bookmarkBtn.textContent = 'Bookmark';
+            }
+            // bookmarkImage.style.fill = "green"
             bookmarkBtn.classList.remove('bookmarked')
         }
     });
@@ -79,16 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updateProgressBarWithPercentage();
-
-    // Example usage: Call this function whenever the total amount pledged changes
     function updateTotalPledged(newAmount) {
         totalPledged.textContent = `$${newAmount}`;
         updateProgressBarWithPercentage();
     }
-
-    // Example usage:
-    // Call updateTotalPledged whenever the total amount pledged changes, e.g., after a new pledge
-    // updateTotalPledged(89914); // Example with $89,914 pledged
 
     // SCROLL BACK TO TOP
     function scrollToTop() {
@@ -105,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     backProjectBtn.addEventListener('click', () => {
         pledgeModal.classList.remove('hidden');
+        overlay.classList.remove('hidden')
+
         scrollToTop()
 
     })
@@ -112,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     rewardBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
             pledgeModal.classList.remove('hidden');
+            overlay.classList.remove('hidden')
             scrollToTop()
         });
     });
@@ -121,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     closeModal.addEventListener('click', () => {
         pledgeModal.classList.add('hidden');
+        overlay.classList.add('hidden')
 
     })
 
@@ -131,7 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     radioButtons.forEach((radio, index) => {
         radio.addEventListener('click', () => {
-            if (radio.classList.contains('active')) {
+            if (radio.classList.contains('out-of-stock')) {
+                alert('Sorry we are out of stock, please select another product')
+            } else if (radio.classList.contains('active')) {
                 radio.classList.remove('active');
                 dropdowns[index].classList.add('hidden');
             } else {
@@ -144,26 +142,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 radio.classList.add('active');
                 dropdowns[index].classList.remove('hidden');
+                activeBorder()
             }
         });
     });
 
-    // SUCCESS MODAL
+    // FINAL VALIDATION & SUCCESS MODAL 
     const continueBtns = document.querySelectorAll('.continue');
     const successModal = document.querySelector('.success-modal');
+    const errorMsgs = document.querySelectorAll('.errorMessage');
+    const pledge = document.querySelectorAll('.pledge-amount-input');
 
-    continueBtns.forEach((btn) => {
+    continueBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
-            pledgeModal.classList.add('hidden');
-            successModal.classList.remove('hidden');
-            scrollToTop()
+            let hasError = false;
+            let totalPledgedAmount = 0;
+
+            pledge.forEach((amountInput) => {
+                const pledgedAmount = parseFloat(amountInput.value);
+                const placeholderValue = parseFloat(amountInput.dataset.placeholder);
+
+                if (pledgedAmount < placeholderValue || amountInput.value === 0) {
+                    errorMsgs[index].textContent = 'Please enter a valid amount';
+                    pledge[index].style.borderColor = "red"
+                    errorMsgs[index].style.color = "red"
+                    hasError = true;
+                } else {
+                    totalPledgedAmount += pledgedAmount;
+                }
+            });
+
+            if (!hasError) {
+                errorMsgs[index].textContent = '';
+                pledgeModal.classList.add('hidden');
+                successModal.classList.remove('hidden');
+                scrollToTop();
+            }
         });
     });
 
+    // FINAL COMPLETE BUTTON
     const completeBtn = document.querySelector('.complete');
 
     completeBtn.addEventListener('click', () => {
         successModal.classList.add('hidden')
+        overlay.classList.add('hidden')
+
         scrollToTop()
         updateBackers()
     })
@@ -176,7 +200,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // UPDATE TOTAL PLEDGED
-    const pledge = document.querySelectorAll('.pledge-amount-input');
+    function roundToTwoDecimalPlaces(value) {
+        return Math.round(value * 100) / 100;
+    }
 
     function updateTotal() {
         let newTotal = parseFloat(totalPledged.textContent.replace(/[^0-9.]/g, ""));
@@ -185,20 +211,42 @@ document.addEventListener("DOMContentLoaded", function () {
             const pledgedAmount = parseFloat(amountInput.value);
 
             if (!isNaN(pledgedAmount)) {
-                newTotal += pledgedAmount;
+                newTotal = roundToTwoDecimalPlaces(newTotal + pledgedAmount);
             }
         });
 
-        totalPledged.textContent = `$${newTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+        totalPledged.textContent = `$${newTotal.toFixed(2)}`;
         updateProgressBarWithPercentage();
     }
 
-
-    // Add event listeners to each input field for pledged amounts
     pledge.forEach((amountInput) => {
         amountInput.addEventListener('input', updateTotal);
+        // console.log(newTotal)
+        // console.log(pledgedAmount)
     });
 
+    // CHANGE ACTIVE BORDER COLOR
+    const pledgeRadios = document.querySelectorAll('input[type="radio"][name="pledge-option"]');
+    const pledgeContainer = document.querySelectorAll('.pledge-container')
 
+    function activeBorder() {
+        pledgeRadios.forEach((radio) => {
+            radio.addEventListener('change', () => {
+                pledgeContainer.forEach((container) => {
+                    container.classList.remove('active-container');
+                });
 
+                if (radio.checked) {
+                    const container = radio.closest('.pledge-container');
+                    container.classList.add('active-container');
+                }
+            });
+        });
+    }
+
+    // DISABLE OUT OF STOCK BUTTONS
+    const outOfStockState = document.querySelectorAll('.out-of-stock-btn');
+    outOfStockState.forEach(button => {
+        button.disabled = true;
+    });
 });

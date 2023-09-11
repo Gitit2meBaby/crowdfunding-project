@@ -57,12 +57,8 @@
           <h2>A beautiful & handcrafted monitor stand to reduce neck and eye strain.</h2>
           <div class="promo-buttons">
             <button id="backProjectBtn" class="primary-btn">Back this project</button>
-            <button class="bookmark-btn"><svg id="bookmarkImage" width="56" height="56"
+            <button class="bookmark-btn"><svg class="bookmark-image" id="bookmarkImage" width="56" height="56"
                 xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <circle fill="#2F2F2F" cx="28" cy="28" r="28" />
-                  <path fill="#B1B1B1" d="M23 19v18l5-5.058L33 37V19z" />
-                </g>
               </svg> Bookmark</button>
           </div>
         </div>
@@ -74,11 +70,13 @@
             <div class="graph-item backed-amount">
               <h2 id="total">$89,914</h2>
               <p>of $100,000 backed</p>
+              <div class="border"></div>
             </div>
 
             <div class="graph-item total-backers">
               <h2 id="totalBackers">5,007</h2>
               <p>total backers</p>
+              <div class="border"></div>
             </div>
 
             <div class="graph-item days-left">
@@ -174,10 +172,14 @@
 
       <div class="pledge-container container">
         <div class="radio-btn-container">
-          <input type="radio" id="noReward-radio" class="pledge-radio">
+          <input type="radio" id="noReward-radio" name="pledge-option" class="pledge-radio">
         </div>
         <div class="pledge-content">
-          <h3>Pledge with no reward</h3>
+          <div class="pledge-title-container">
+            <div class="pledge-title no-reward">
+              <h3>Pledge with no reward</h3>
+            </div>
+          </div>
           <p>Choose to support us without a reward if you simply believe in our project. As a backer,
             you will be signed up to receive product updates via email.</p>
         </div>
@@ -186,10 +188,10 @@
       <!-- Selected pledge start -->
       <div class="dropdown hidden">
         <div class="enter-pledge">
-          <p>Enter your pledge</p>
+          <p class="errorMessage">Enter your pledge</p>
         </div>
         <div class="dropdown-btns">
-          <input type="number" id="noPledgeAmount" class="pledge-amount-input" placeholder="0">
+          <input type="number" id="noPledgeAmount" class="pledge-amount-input" placeholder="0" data-placeholder="0">
           <button class="primary-btn continue">Continue</button>
         </div>
       </div>
@@ -215,14 +217,19 @@
               and
               you’ll be added to a special Backer member list.</p>
           </div>
+          <div class="amount-left-mobile">
+            <h3>101</h3>
+            <p>left</p>
+          </div>
         </div>
       </div>
 
       <!-- Selected pledge start -->
       <div class="dropdown hidden">
-        <p>Enter your pledge</p>
+        <p class="errorMessage">Enter your pledge</p>
         <div class="dropdown-btns">
-          <input type="number" id="bambooPledgeAmount" class="pledge-amount-input" placeholder="25">
+          <input type="number" id="bambooPledgeAmount" class="pledge-amount-input" placeholder="25"
+            data-placeholder="25">
           <button class="primary-btn continue">Continue</button>
         </div>
       </div>
@@ -247,15 +254,20 @@
             <p>You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer
               member list. Shipping is included.</p>
           </div>
+          <div class="amount-left-mobile">
+            <h3>64</h3>
+            <p>left</p>
+          </div>
         </div>
       </div>
 
 
       <!-- Selected pledge start -->
       <div class="dropdown hidden">
-        <p>Enter your pledge</p>
+        <p class="errorMessage">Enter your pledge</p>
         <div class="dropdown-btns">
-          <input type="number" id="blackPledgeAmount" class="pledge-amount-input" placeholder="75">
+          <input type="number" id="blackPledgeAmount" class="pledge-amount-input" placeholder="75"
+            data-placeholder="75">
           <button class="primary-btn continue">Continue</button>
         </div>
       </div>
@@ -263,7 +275,7 @@
 
       <div class="pledge-container container out-of-stock">
         <div class="radio-btn-container">
-          <input type="radio" name="pledge-option" id="special-radio" class="pledge-radio">
+          <input type="radio" name="pledge-option" id="special-radio" class="pledge-radio out-of-stock">
         </div>
         <div class="pledge-content">
           <div class="pledge-title-container">
@@ -280,15 +292,20 @@
             <p>You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You’ll be added
               to our Backer member list. Shipping is included.</p>
           </div>
+          <div class="amount-left-mobile">
+            <h3>0</h3>
+            <p>left</p>
+          </div>
         </div>
       </div>
 
 
       <!-- Selected pledge  start -->
       <div class="dropdown hidden">
-        <p>Enter your pledge</p>
+        <p class="errorMessage">Enter your pledge</p>
         <div class="dropdown-btns">
-          <input type="number" id="specialPledgeAmount" class="pledge-amount-input" placeholder="200">
+          <input type="number" id="specialPledgeAmount" class="pledge-amount-input" placeholder="200"
+            data-placeholder="200">
           <button class="primary-btn continue">Continue</button>
         </div>
       </div>
@@ -309,6 +326,9 @@
     </div>
   </section>
   <!-- Success modal end -->
+
+  <!-- OVERLAY-->
+  <div class="overlay hidden" id="overlay"></div>
 </body>
 
 </html>
